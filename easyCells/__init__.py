@@ -20,11 +20,15 @@ class cells:
         self.worksheet=None
 
     # directions to write
+    #    getCell          (0,0)
     #    getCellName      A1
     #    getCellNameAbs   $A$1
     #    getCellNameAbsX  $A1
     #    getCellNameAbsY  A$1
 
+    def getCell(self):
+        "retrun cell coordinate in format tuple"
+        return (self.__pointx,self.__pointy)
 
     def getCellName(self): 
         "return name cell in format 'A1' 'B2' etc"
@@ -110,7 +114,7 @@ class cells:
     def write(self,content):
         "write an content in a cell"
         if self.__existsWorkSheet:
-            self.worksheet.write(self.__pointx,self.__pointy,content)
+            self.worksheet.write(self.__pointy,self.__pointx,content)
             self.step()
         else:
             print("First declare sheet: using easyCells.easyCells.sheet(name)")
