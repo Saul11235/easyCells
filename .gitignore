@@ -1,6 +1,7 @@
 *.swp
 *.pyc
 */__pycache__
+*.xlsx
 
 /build
 /easyCells.egg-info
