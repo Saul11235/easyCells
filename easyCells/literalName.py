@@ -20,11 +20,11 @@ def literalName(coorX,coorY):
         return l
 
     textCHAR="x"
-    listNumChar=splitNum(coorX,10)
+  #  listNumChar=splitNum(coorX,10)
 
-    for x in listNumChar:
-        nchar=getchar(x)
-        textCHAR=nchar+textCHAR
+  #  for x in listNumChar:
+  #      nchar=getchar(x)
+  #      textCHAR=nchar+textCHAR
 
     textNUM=str(int(coorY+1))
 

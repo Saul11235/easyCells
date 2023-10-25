@@ -2,8 +2,11 @@
 
 import xlsxwriter
 
-try:    from .literalName import literalName
-except: from literalName import literalName
+try:    from literalName import literalName
+except: from .literalName  import literalName
+
+try:    from cellFormatsData import styles as cellstyles
+except: from .cellFormatsData  import styles as cellstyles
 
 class cells:
 
@@ -18,6 +21,20 @@ class cells:
         self.workbook=xlsxwriter.Workbook(nameFile)
         self.__existsWorkSheet=False
         self.worksheet=None
+        #data styles
+        self.__dataStyles=cellstyles
+        self.__listStyles=list(cellstyles.keys())
+        self.__customStyle=[]
+        self.__onlyOneStyle=[] #only for one use
+        self.__lastStyle=None
+
+
+    # get xlsxwriter objetcts
+    #    getWorkBook
+    #    getWorkSheet
+
+    def getWorkBook(self):  return self.workbook
+    def getWorkSheet(self): return self.worksheet
 
     # directions to write
     #    getCell          (0,0)
@@ -49,6 +66,20 @@ class cells:
         "return name cell in format 'A$1' 'B$2' etc"
         _cellN=literalName(self.__pointx,self.__pointy)
         return str(_cellN[0])+"$"+str(_cellN[1])
+
+    #  style functions
+    def __makeStyle(self,inputList):
+        stylesConfirmed=[]
+        for element in inputList:
+            print(element)
+
+            pass
+        pass
+
+    def styles(self,**args):
+        print("styles")
+        for x in args: print(x)
+
 
     # directions to write
     #    dir1 - rigth
@@ -123,6 +154,8 @@ class cells:
         self.workbook.close()
 
 
-if __name__=="__main__": print("ok")
+if __name__=="__main__":
+    a=cells("data.xlsx")
+    print("ok")
 
 
