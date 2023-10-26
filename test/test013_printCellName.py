@@ -7,7 +7,7 @@ file=cells("example.xlsx")
 file.sheet("new sheet")
 
 
-for x in range(2):
+for x in range(100):
     for y in range(4000):
         var=file.getCellName()
         file.write(str(var))

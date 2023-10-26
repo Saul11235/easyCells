@@ -11,5 +11,5 @@ just need an package:
 - install the *XlsxWriter* package using the bash <code>pip install XlsxWriter</code>
 easyCells, can return XlsxWriter objects for advanced users.
 
-> writed by [Edwin Saul](www.edwinsaul.com)
+> writed by [Edwin Saul](https://www.edwinsaul.com)
 

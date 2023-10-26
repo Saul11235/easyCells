@@ -2,29 +2,38 @@
 def literalName(coorX,coorY):
 
     def division(bigNum,littleNum):
-        remainer=int(bigNum%littleNum)
-        division=int((bigNum-remainer)/littleNum)
+        remainer=int(int(bigNum)%int(littleNum))
+        division=int((int(bigNum)-int(remainer))/int(littleNum))
         return(division,remainer)
 
     def getchar(num):
-        listChar="ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        if num==0: return ""
+        listChar="-ABCDEFGHIJKLMNOPQRSTUVWXYZ"
         return str(listChar[num])
 
-    def splitNum(num,base):
-        l=[]; big=num; little=0
-        if num>base: return[num]
-        while big>=base:
-            v=division(big,base)
-            big=v[0]; little=v[1]; l.append(little)
-            if big<base:l.append(big)
-        return l
+    def splitNum(num,base):  #divides a num 1=A; 27=AA; etc
+        if num<base: return [num+1]
+        from math import log
+        l=[]; _count=num
+        _exp_max=int(  log(abs(num)+1)/log(base)   )+1
+        for x in range(_exp_max,0,-1):
+            _div=division(_count,pow(base,x))
+            if _div[0]>0:
+                if _div[1]==0: _div= (_div[0]-1,base)
+                _count=_div[1]
+                l.append(_div[0])
+                if _div[1]<=base:
+                    print(_div)
+                    l.append(_div[1])
+                    _count=0
+        return l  #return list of digits
 
-    textCHAR="x"
-  #  listNumChar=splitNum(coorX,10)
+    textCHAR=""
+    listNumChar=splitNum(coorX,26)
 
-  #  for x in listNumChar:
-  #      nchar=getchar(x)
-  #      textCHAR=nchar+textCHAR
+    for x in listNumChar:
+        nchar=getchar(x)
+        textCHAR=textCHAR+nchar
 
     textNUM=str(int(coorY+1))
 
@@ -35,8 +44,8 @@ def literalName(coorX,coorY):
 
 if __name__=="__main__":
     #---------
-    inix=0
-    limx=21
+    inix=24
+    limx=400
     #--------
     iniy=0
     limy=iniy+1
