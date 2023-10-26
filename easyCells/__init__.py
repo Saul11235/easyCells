@@ -2,11 +2,14 @@
 
 import xlsxwriter
 
-try:    from literalName import literalName
+try:    from literalName   import literalName
 except: from .literalName  import literalName
 
-try:    from cellFormatsData import styles as cellstyles
+try:    from cellFormatsData   import styles as cellstyles
 except: from .cellFormatsData  import styles as cellstyles
+
+try:    from cellFormatsData   import builds as buildstyles
+except: from .cellFormatsData  import builds as buildstyles
 
 class cells:
 

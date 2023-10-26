@@ -17,6 +17,10 @@ styles={
 
         }
 
+builds= {
+        "note_1":["bold","f-blue"],
+        }
+
 
 if __name__=="__main__": print("ok")
 
