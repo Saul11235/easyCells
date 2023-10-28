@@ -30,11 +30,40 @@ class cells:
         self.__currentStyle=None
 
     # get xlsxwriter objetcts
+    #    sheet(name_New_WorkSheet)
+    #    close
     #    getWorkBook
     #    getWorkSheet
 
+    def sheet(self,name_New_WorkSheet) :
+        "create a new sheet whit a name"
+        self.__existsWorkSheet=True
+        self.__pointx=0
+        self.__pointy=0
+        self.__currentStyle=None
+        self.worksheet=self.workbook.add_worksheet(name_New_WorkSheet)
+        pass
+
+    def close(self):
+        self.workbook.close()
+
     def getWorkBook(self):  return self.workbook
     def getWorkSheet(self): return self.worksheet
+
+    # write functions
+    #   write(content)
+
+    def write(self,content):
+        "write an content in a cell"
+        if self.__existsWorkSheet:
+            if self.__currentStyle==None:
+                self.worksheet.write(self.__pointy,self.__pointx,content)
+            else:
+                self.worksheet.write(self.__pointy,self.__pointx,content,self.__currentStyle)
+            self.step()
+        else:
+            raise Exception("First declare sheet: using easyCells.easyCells.sheet(name)")
+
 
     # directions to write
     #    getCell          (0,0)
@@ -68,6 +97,10 @@ class cells:
         return str(_cellN[0])+"$"+str(_cellN[1])
 
     #  style functions
+    #   newStyle(nameSytle , * contents)
+    #   getListStyles 
+    #   style
+    #   noStyle
 
     def __configStyles(self):
         #config styles from extern data
@@ -135,19 +168,42 @@ class cells:
         "direction 4: down to up."
         self.__dirX=0; self.__dirY=-1
 
+    # functions move    
+    #   step
+    #   backStep
+    #   perpendicularStep
+    #   perpendicularBackStep
+    #   nLine
+    #   move
+    #   absoluteMove
+
+    def __verifiPointers(self):
+        if self.__pointx<0: self.__pointx=0
+        if self.__pointy<0: self.__pointy=0
+
     def step(self):
         "move the pointer to the next position"
         self.__pointx=self.__pointx+self.__dirX
         self.__pointy=self.__pointy+self.__dirY
-        if self.__pointx<0: self.__pointx=0
-        if self.__pointy<0: self.__pointy=0
+        self.__verifiPointers()
 
     def backStep(self):
         "move the pointer to the back position"
         self.__pointx=self.__pointx-self.__dirX
         self.__pointy=self.__pointy-self.__dirY
-        if self.__pointx<0: self.__pointx=0
-        if self.__pointy<0: self.__pointy=0
+        self.__verifiPointers()
+
+    def perpendicularStep(self):
+        "move the pointer to the next position"
+        self.__pointx=self.__pointx+self.__dirY
+        self.__pointy=self.__pointy+self.__dirX
+        self.__verifiPointers()
+
+    def perpendicularBackStep(self):
+        "move the pointer to the back position"
+        self.__pointx=self.__pointx-self.__dirY
+        self.__pointy=self.__pointy-self.__dirX
+        self.__verifiPointers()
 
     def nLine(self):
         "create an new line whit an carriage return"
@@ -163,36 +219,26 @@ class cells:
         elif self.__dirX==0 and self.__dirY==-1: # dir 4
             self.__pointy=0
             self.__pointx-=1
-        if self.__pointx<0: self.__pointx=0
-        if self.__pointy<0: self.__pointy=0
+        self.__verifiPointers()
 
     def move(self,X,Y):
         "relative move in X and Y cells to current cell"
         self.__pointx+=int(X)
         self.__pointy+=int(Y)
-        if self.__pointx<0: self.__pointx=0
-        if self.__pointy<0: self.__pointy=0
+        self.__verifiPointers()
+
+    def absoluteMove(self,X,Y):
+        "relative move in X and Y cells to current cell"
+        self.__pointx=int(X)
+        self.__pointy=int(Y)
+        self.__verifiPointers()
+
+    # dimensionCells functions
+    #   dimx (*dims)
+
+    def dimX(self,*dims):
+        print(dims)
         pass
-
-    def sheet(self,name_New_WorkSheet) :
-        "create a new sheet whit a name"
-        self.__existsWorkSheet=True
-        self.worksheet=self.workbook.add_worksheet(name_New_WorkSheet)
-        pass
-
-    def write(self,content):
-        "write an content in a cell"
-        if self.__existsWorkSheet:
-            if self.__currentStyle==None:
-                self.worksheet.write(self.__pointy,self.__pointx,content)
-            else:
-                self.worksheet.write(self.__pointy,self.__pointx,content,self.__currentStyle)
-            self.step()
-        else:
-            raise Exception("First declare sheet: using easyCells.easyCells.sheet(name)")
-
-    def close(self):
-        self.workbook.close()
 
 
 if __name__=="__main__":
