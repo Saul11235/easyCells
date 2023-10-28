@@ -19,6 +19,8 @@ styles={
 
 builds= {
         "note_1":["bold","f-blue"],
+        "note_2":["bold","f-red"],
+        "note_3":["bold","f-red",{"font_color":"green"}],
         }
 
 

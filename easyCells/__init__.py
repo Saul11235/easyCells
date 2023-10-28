@@ -24,13 +24,10 @@ class cells:
         self.workbook=xlsxwriter.Workbook(nameFile)
         self.__existsWorkSheet=False
         self.worksheet=None
-        #data styles
-        self.__dataStyles=cellstyles
-        self.__listStyles=list(cellstyles.keys())
-        self.__customStyle=[]
-        self.__onlyOneStyle=[] #only for one use
-        self.__lastStyle=None
-
+        # styles
+        self.__dicStyles={}
+        self.__configStyles()
+        self.__currentStyle=None
 
     # get xlsxwriter objetcts
     #    getWorkBook
@@ -71,17 +68,48 @@ class cells:
         return str(_cellN[0])+"$"+str(_cellN[1])
 
     #  style functions
-    def __makeStyle(self,inputList):
-        stylesConfirmed=[]
-        for element in inputList:
-            print(element)
 
-            pass
-        pass
+    def __configStyles(self):
+        #config styles from extern data
+        self.__dicStyles=cellstyles
+        for custom in buildstyles.keys():
+            self.newStyle(custom,*tuple(buildstyles[custom]))
 
-    def styles(self,**args):
-        print("styles")
-        for x in args: print(x)
+    def __isValidStyle(self,obj):
+        is_valid=False
+        try:self.getListStyles().index(obj);is_valid=True
+        except:pass
+        return is_valid
+
+    def __getStyle(self,obj): return self.__dicStyles[obj]
+
+    def newStyle(self,nameSytle,*contents):
+        newStyle={}
+        listSubStyles=[]
+        for content in contents:
+            if type(content)==dict: listSubStyles.append(content)
+            else:
+                if self.__isValidStyle(content):
+                    listSubStyles.append(self.__getStyle(content))
+                else:
+                    raise Exception("Error "+str(content)+" is not a valid style")
+        for dicStyle in listSubStyles:
+            for item in dicStyle.keys():
+                newStyle[item]=dicStyle[item]
+        if newStyle!={}:
+            self.__dicStyles[nameSytle]=newStyle
+
+    def getListStyles(self): return list(self.__dicStyles.keys())
+
+    def style(self,nameSytle):
+        if self.__isValidStyle(nameSytle):
+            dict_style=self.__getStyle(nameSytle)
+            newStyle=self.workbook.add_format(dict_style)
+            self.__currentStyle=newStyle
+        else:
+            raise Exception("Error "+str(nameSytle)+" is no a valid style")
+
+    def noStyle(self): self.__currentStyle=None
 
 
     # directions to write
@@ -111,6 +139,13 @@ class cells:
         "move the pointer to the next position"
         self.__pointx=self.__pointx+self.__dirX
         self.__pointy=self.__pointy+self.__dirY
+        if self.__pointx<0: self.__pointx=0
+        if self.__pointy<0: self.__pointy=0
+
+    def backStep(self):
+        "move the pointer to the back position"
+        self.__pointx=self.__pointx-self.__dirX
+        self.__pointy=self.__pointy-self.__dirY
         if self.__pointx<0: self.__pointx=0
         if self.__pointy<0: self.__pointy=0
 
@@ -148,10 +183,13 @@ class cells:
     def write(self,content):
         "write an content in a cell"
         if self.__existsWorkSheet:
-            self.worksheet.write(self.__pointy,self.__pointx,content)
+            if self.__currentStyle==None:
+                self.worksheet.write(self.__pointy,self.__pointx,content)
+            else:
+                self.worksheet.write(self.__pointy,self.__pointx,content,self.__currentStyle)
             self.step()
         else:
-            print("First declare sheet: using easyCells.easyCells.sheet(name)")
+            raise Exception("First declare sheet: using easyCells.easyCells.sheet(name)")
 
     def close(self):
         self.workbook.close()
