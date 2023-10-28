@@ -236,9 +236,17 @@ class cells:
     # dimensionCells functions
     #   dimx (*dims)
 
-    def dimX(self,*dims):
-        print(dims)
-        pass
+    def dimx(self,*dims):
+        list_ints=[]
+        for dim in dims:
+            try: list_ints.append(abs(int(dim)))
+            except: pass
+        if len(dims)==len(list_ints):
+            _px=self.__pointx
+            for x in range(len(list_ints)):
+                self.worksheet.set_column(_px+x,_px+x,list_ints[x])
+        else:
+            raise Exception("Error "+str(dims)+" must be integers")
 
 
 if __name__=="__main__":
