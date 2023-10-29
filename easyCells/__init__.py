@@ -42,7 +42,6 @@ class cells:
         self.__pointy=0
         self.__currentStyle=None
         self.worksheet=self.workbook.add_worksheet(name_New_WorkSheet)
-        pass
 
     def close(self):
         self.workbook.close()
@@ -53,14 +52,31 @@ class cells:
     # write functions
     #   write(content)
 
-    def write(self,content):
-        "write an content in a cell"
-        if self.__existsWorkSheet:
+    def write(self,content,*dimcells):
+        "write an content in a cell or an agrupment of these"
+        dimCells=[]
+        if len(dimcells):
+            try:
+                dimCells.append(abs(int(dimcells[0]-1)))
+                dimCells.append(abs(int(dimcells[1]-1)))
+            except: pass
+            dimCells.append(0);dimCells.append(0)
+        #----------------------------
+        if self.__existsWorkSheet and not(len(dimcells)):
             if self.__currentStyle==None:
                 self.worksheet.write(self.__pointy,self.__pointx,content)
             else:
                 self.worksheet.write(self.__pointy,self.__pointx,content,self.__currentStyle)
             self.step()
+        #----------------------------
+        elif self.__existsWorkSheet and len(dimcells):
+            if self.__currentStyle==None:
+                self.worksheet.merge_range(self.__pointy,self.__pointx,self.__pointy+dimCells[1],self.__pointx+dimCells[0],content)
+            else:
+                self.worksheet.merge_range(self.__pointy,self.__pointx,self.__pointy+dimCells[1],self.__pointx+dimCells[0],content,self.__currentStyle)
+            self.move(dimCells[0],dimCells[1])    
+            self.step()
+        #----------------------------
         else:
             raise Exception("First declare sheet: using easyCells.easyCells.sheet(name)")
 
@@ -99,8 +115,8 @@ class cells:
     #  style functions
     #   newStyle(nameSytle , * contents)
     #   getListStyles 
-    #   style
-    #   noStyle
+    #   style (*namestyles)
+    #   noStyle 
 
     def __configStyles(self):
         #config styles from extern data
@@ -134,13 +150,29 @@ class cells:
 
     def getListStyles(self): return list(self.__dicStyles.keys())
 
-    def style(self,nameSytle):
-        if self.__isValidStyle(nameSytle):
-            dict_style=self.__getStyle(nameSytle)
+    def style(self,*nameSytles):
+        if len(nameSytles)==0:
+            self.noStyle()
+        elif len(nameSytles)==1 and self.__isValidStyle(nameSytles[0]):
+            dict_style=self.__getStyle(nameSytles[0])
             newStyle=self.workbook.add_format(dict_style)
             self.__currentStyle=newStyle
-        else:
+        elif len(nameSytles)==1 and not(self.__isValidStyle(nameSytles[0])):
             raise Exception("Error "+str(nameSytle)+" is no a valid style")
+        else:
+            list_dic_styles=[]
+            for name in nameSytles:
+                if self.__isValidStyle(name):
+                    list_dic_styles.append(self.__getStyle(name))
+                else:
+                    raise Exception("Error "+str(name)+" is no a valid style")
+            dict_style={}
+            for d in list_dic_styles:
+                for e in d.keys():
+                    dict_style[e]=d[e]
+            newStyle=self.workbook.add_format(dict_style)
+            self.__currentStyle=newStyle
+
 
     def noStyle(self): self.__currentStyle=None
 
@@ -239,14 +271,38 @@ class cells:
     def dimx(self,*dims):
         list_ints=[]
         for dim in dims:
-            try: list_ints.append(abs(int(dim)))
+            try: list_ints.append(abs(float(dim)))
             except: pass
         if len(dims)==len(list_ints):
             _px=self.__pointx
             for x in range(len(list_ints)):
                 self.worksheet.set_column(_px+x,_px+x,list_ints[x])
-        else:
-            raise Exception("Error "+str(dims)+" must be integers")
+        else:raise Exception("Error "+str(dims)+" must be integers")
+
+    def dimy(self,*dims):
+        list_ints=[]
+        for dim in dims:
+            try: list_ints.append(abs(float(dim)))
+            except: pass
+        if len(dims)==len(list_ints):
+            _py=self.__pointy
+            for y in range(len(list_ints)):
+                self.worksheet.set_row(_py+y,list_ints[y])
+        else:raise Exception("Error "+str(dims)+" must be integers")
+
+    def dimnx(self,ncells,dim):
+        if type(ncells)==int or (type(dim)==int or type(dim)==float):
+            self.dimx(*tuple([dim]*abs(ncells)))
+        else:raise Exception("Error "+str(ncells)+" must be an int, and "+str(dim)+" must be an number")
+
+    def dimny(self,ncells,dim):
+        if type(ncells)==int or (type(dim)==int or type(dim)==float):
+            self.dimy(*tuple([dim]*abs(ncells)))
+        else:raise Exception("Error "+str(ncells)+" must be an int, and "+str(dim)+" must be an number")
+
+
+    #---------------------------------------
+    #---------------------------------------
 
 
 if __name__=="__main__":

@@ -13,6 +13,8 @@ styles={
 
         # background color
         "b-gray"     :{"bg_color":"gray"},
+        "b-yellow"   :{"bg_color":"yellow"},
+        "b-blue"     :{"bg_color":"blue"},
 
 
         }
