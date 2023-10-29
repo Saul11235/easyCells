@@ -35,13 +35,16 @@ class cells:
     #    getWorkBook
     #    getWorkSheet
 
-    def sheet(self,name_New_WorkSheet) :
-        "create a new sheet whit a name"
+    def sheet(self,name_New_WorkSheet,*colorTab) :
+        "create a new sheet whit a name, and add color"
         self.__existsWorkSheet=True
         self.__pointx=0
         self.__pointy=0
         self.__currentStyle=None
-        self.worksheet=self.workbook.add_worksheet(name_New_WorkSheet)
+        try:
+            self.worksheet=self.workbook.add_worksheet(name_New_WorkSheet)
+        except: raise Exception("Error creating new worksheet: "+str(name_New_WorkSheet))
+
 
     def close(self):
         self.workbook.close()
@@ -50,7 +53,15 @@ class cells:
     def getWorkSheet(self): return self.worksheet
 
     # write functions
-    #   write(content)
+    #   write(content,*dimcells)
+    #   writeM(*contents)
+
+
+    def writeM(self,*contents):
+        "write multiple cells"
+        for content in contents:
+            self.write(content)
+
 
     def write(self,content,*dimcells):
         "write an content in a cell or an agrupment of these"

@@ -10,11 +10,20 @@ styles={
         # font color
         "f-blue"     :{"font_color":"blue"},
         "f-red"      :{"font_color":"red"},
+        "f-black"    :{"font_color":"black"},
+        "f-white"    :{"font_color":"white"},
+
+        # font size
+
+        1            :{"font_size":1},
+        2            :{"font_size":2},
 
         # background color
         "b-gray"     :{"bg_color":"gray"},
         "b-yellow"   :{"bg_color":"yellow"},
         "b-blue"     :{"bg_color":"blue"},
+        "b-black"    :{"bg_color":"black"},
+        "b-white"    :{"bg_color":"white"},
 
 
         }
