@@ -8,7 +8,7 @@ file.sheet("data Table","red")
 
 file.dimx(3,10,20,20,20)
 
-file.style("bold","f-blue",14)
+file.style("bold","f-blue","f-20")
 file.write("Data Table1",5); file.nLine()
 
 file.style("italic","b-black","f-white")

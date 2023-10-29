@@ -15,8 +15,8 @@ styles={
 
         # font size
 
-        1            :{"font_size":1},
-        2            :{"font_size":2},
+        "f-10"       :{"font_size":10},
+        "f-20"       :{"font_size":20},
 
         # background color
         "b-gray"     :{"bg_color":"gray"},
