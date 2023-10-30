@@ -253,30 +253,55 @@ class cells:
     #   move
     #   absoluteMove
 
+    def step(self,*npass):
+        "move the pointer to the next position"
+        n=1
+        try: n=abs(int(npass[0]))
+        except: pass
+        for x in range(n): self.__raw_step()
+
+    def backStep(self,*npass):
+        "move the pointer to the back position"
+        n=1
+        try: n=abs(int(npass[0]))
+        except: pass
+        for x in range(n): self.__raw_backStep()
+            
+    def perpendicularStep(self,*npass):
+        "move the pointer to the next position perpendicular"
+        n=1
+        try: n=abs(int(npass[0]))
+        except: pass
+        for x in range(n): self.__raw_perpendicularStep()
+
+    def perpendicularBackStep(self,*npass):
+        "move the pointer to the back position perpendicular"
+        n=1
+        try: n=abs(int(npass[0]))
+        except: pass
+        for x in range(n): self.__raw_perpendicularBackStep()
+ 
+
     def __verifiPointers(self):
         if self.__pointx<0: self.__pointx=0
         if self.__pointy<0: self.__pointy=0
 
-    def step(self):
-        "move the pointer to the next position"
+    def __raw_step(self):
         self.__pointx=self.__pointx+self.__dirX
         self.__pointy=self.__pointy+self.__dirY
         self.__verifiPointers()
 
-    def backStep(self):
-        "move the pointer to the back position"
+    def __raw_backStep(self):
         self.__pointx=self.__pointx-self.__dirX
         self.__pointy=self.__pointy-self.__dirY
         self.__verifiPointers()
 
-    def perpendicularStep(self):
-        "move the pointer to the next position"
+    def __raw_perpendicularStep(self):
         self.__pointx=self.__pointx+self.__dirY
         self.__pointy=self.__pointy+self.__dirX
         self.__verifiPointers()
 
-    def perpendicularBackStep(self):
-        "move the pointer to the back position"
+    def __raw_perpendicularBackStep(self):
         self.__pointx=self.__pointx-self.__dirY
         self.__pointy=self.__pointy-self.__dirX
         self.__verifiPointers()
@@ -394,8 +419,20 @@ class cells:
         for conf in configs:
             for command in self.__worksheetConfig[conf]:
                 self.__runConfig(command)
-        pass
 
+    #----------------------------
+    # inster img
+    #    img 
+    def img(self,pathImg,*scale):
+        dic={"x_scale":1,"y_scale":1}
+        try:
+            dic["x_scale"]=abs(float(scale[0]))
+            dic["y_scale"]=abs(float(scale[0]))
+        except: pass
+        try: self.worksheet.insert_image(self.__pointy,self.__pointx,pathImg,dic)
+        except: raise Exception("Error set img "+str(pathImg)+" "+str(scale))
+
+    #----------------------------
 
     
 
