@@ -333,7 +333,11 @@ class cells:
 
 
     #---------------------------------------
+    # visualization functions
+    def splitView(self) : 
+        self.worksheet.freeze_panes(self.__pointy,self.__pointx)
     #---------------------------------------
+    
 
 
 if __name__=="__main__":
