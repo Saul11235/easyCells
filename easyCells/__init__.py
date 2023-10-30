@@ -1,15 +1,25 @@
 # easy cells
+# writed by Edwin Saul https://edwinsaul.com
 
 import xlsxwriter
 
-try:    from literalName   import literalName
-except: from .literalName  import literalName
+try:    from .literalName import literalName
+except: from literalName  import literalName
 
-try:    from cellFormatsData   import styles as cellstyles
-except: from .cellFormatsData  import styles as cellstyles
+try:    from .cellFormatsData  import styles as cellstyles
+except: from cellFormatsData   import styles as cellstyles
 
-try:    from cellFormatsData   import builds as buildstyles
-except: from .cellFormatsData  import builds as buildstyles
+try:    from .cellFormatsData  import builds as buildstyles
+except: from cellFormatsData   import builds as buildstyles
+
+try: 
+    from .worksheetConfigData  import list_config_workSheet 
+    from .worksheetConfigData  import custom_sytle_config
+    from .worksheetConfigData  import config
+except:
+    from  worksheetConfigData  import list_config_workSheet
+    from  worksheetConfigData  import custom_sytle_config
+    from  worksheetConfigData  import config 
 
 class cells:
 
@@ -31,6 +41,9 @@ class cells:
         # filters
         self.__infiFilterX=0
         self.__infiFilterY=0
+        # worksheet config
+        self.__worksheetConfig={}
+        self.__loadConfigWorksheet()
             
 
     # get xlsxwriter objetcts
@@ -331,12 +344,57 @@ class cells:
             self.dimy(*tuple([dim]*abs(ncells)))
         else:raise Exception("Error "+str(ncells)+" must be an int, and "+str(dim)+" must be an number")
 
-
     #---------------------------------------
     # visualization functions
+    #   splitView config
     def splitView(self) : 
         self.worksheet.freeze_panes(self.__pointy,self.__pointx)
+
     #---------------------------------------
+    # config worksheet 
+    #
+    def __loadConfigWorksheet(self):
+        for element in list_config_workSheet:
+            self.__worksheetConfig[element]=[element]
+        for element in custom_sytle_config.keys():
+            self.newConfig(element,*tuple(custom_sytle_config[element]))
+
+    def __isValidConfCommand(self,conf):
+        is_valid=False
+        try: list_config_workSheet.index(conf); is_valid=True
+        except: pass
+        return is_valid
+
+    def __isValidConf(self,conf):
+        is_valid=False
+        try: list(self.__worksheetConfig.keys()).index(conf); is_valid=True
+        except: pass
+        return is_valid
+
+    def newConfig(self,nameConfig,*args):
+        args=list(args)
+        for arg in args:
+            if self.__isValidConfCommand(arg) and arg != nameConfig: pass
+            else: 
+                raise Exception("Error "+str(arg)+" is not a valid config style")
+        self.__worksheetConfig[nameConfig]=args
+
+    def __runConfig(self,commandConfig):
+        config(commandConfig,self.worksheet)
+
+    def config(self,*configs):
+        "configure a worksheet"
+        configs=list(configs)
+        for c in configs:
+            if self.__isValidConf(c): pass
+            else: raise Exception("Error "+str(c)+" isn't a valid configuration")
+            pass
+        for conf in configs:
+            for command in self.__worksheetConfig[conf]:
+                self.__runConfig(command)
+        pass
+
+
     
 
 

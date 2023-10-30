@@ -1,3 +1,5 @@
+# easy cells
+# writed by Edwin Saul https://edwinsaul.com
 
 def literalName(coorX,coorY):
 

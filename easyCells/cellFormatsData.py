@@ -1,4 +1,5 @@
-# formats for cells syles
+# easy cells
+# writed by Edwin Saul https://edwinsaul.com
 
 styles={
         # aligment
@@ -6,7 +7,7 @@ styles={
         "right"      :{"align":"right"},
         "center"     :{"align":"center"},
         "justify"    :{"align":"justify"},
-        "vcenter"    :{"align":"vcenter"},
+        "vcenter"    :{"valign":"vcenter"},
         "vjustify"   :{"align":"vjustify"},
         "top"        :{"valign":"top"},
         "bottom"     :{"valign":"bottom"},
