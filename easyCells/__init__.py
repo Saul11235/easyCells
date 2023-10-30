@@ -28,6 +28,10 @@ class cells:
         self.__dicStyles={}
         self.__configStyles()
         self.__currentStyle=None
+        # filters
+        self.__infiFilterX=0
+        self.__infiFilterY=0
+            
 
     # get xlsxwriter objetcts
     #    sheet(name_New_WorkSheet)
@@ -35,19 +39,23 @@ class cells:
     #    getWorkBook
     #    getWorkSheet
 
+
     def sheet(self,name_New_WorkSheet,*colorTab) :
         "create a new sheet whit a name, and add color"
         self.__existsWorkSheet=True
         self.__pointx=0
         self.__pointy=0
         self.__currentStyle=None
-        try:
-            self.worksheet=self.workbook.add_worksheet(name_New_WorkSheet)
+        try: self.worksheet=self.workbook.add_worksheet(name_New_WorkSheet)
         except: raise Exception("Error creating new worksheet: "+str(name_New_WorkSheet))
+        if len(colorTab):
+            try: self.worksheet.set_tab_color(colorTab[0])
+            except: raise Exception("Error "+str(colorTab[0])+" is not a valid color for a worksheet")
 
 
     def close(self):
         self.workbook.close()
+
 
     def getWorkBook(self):  return self.workbook
     def getWorkSheet(self): return self.worksheet
@@ -187,6 +195,18 @@ class cells:
 
     def noStyle(self): self.__currentStyle=None
 
+    # Set Filters to manage data
+    #   beginFilter() 
+    #   endFilter()
+
+    def beginFilter(self):
+        self.__infiFilterX=self.__pointx
+        self.__infiFilterY=self.__pointy
+
+    def endFilter(self):
+        self.backStep()
+        self.worksheet.autofilter(self.__infiFilterY,self.__infiFilterX,self.__pointy,self.__pointx)
+        self.step()
 
     # directions to write
     #    dir1 - rigth
