@@ -7,7 +7,7 @@ file=cells("example.xlsx")
 file.sheet("data Table","red")
 
 # config  worksheet  
-file.config("nogrid","landscape")
+file.config("nogrid","landscape","noheaders","viewBreak")
 
 file.dimx(3,10,20,20,20)
 file.dimy(30)

@@ -382,6 +382,8 @@ class cells:
     def __runConfig(self,commandConfig):
         config(commandConfig,self.worksheet)
 
+    def getListConfigs(self): return list(self.__worksheetConfig.keys())
+
     def config(self,*configs):
         "configure a worksheet"
         configs=list(configs)
