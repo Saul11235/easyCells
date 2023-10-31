@@ -12,6 +12,9 @@ except: from cellFormatsData   import styles as cellstyles
 try:    from .cellFormatsData  import builds as buildstyles
 except: from cellFormatsData   import builds as buildstyles
 
+try:    from .class_dataset    import dataset
+except: from class_dataset     import dataset
+
 try: 
     from .worksheetConfigData  import list_config_workSheet 
     from .worksheetConfigData  import custom_sytle_config
@@ -44,6 +47,8 @@ class cells:
         # worksheet config
         self.__worksheetConfig={}
         self.__loadConfigWorksheet()
+        # object dataset (to manage formulas)
+        self.__dataset=dataset(self)
             
 
     # get xlsxwriter objetcts
